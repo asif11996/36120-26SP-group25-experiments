@@ -1,0 +1,7 @@
+experiment,features,model,main_change,auprc_mean,auprc_std,hypothesis,learning,note
+0-dummy,all,DummyClassifier,Random baseline,0.0345,0.0018,Random scores AUPRC = prevalence,Confirmed: 0.0345 vs prevalence 0.0344,row-level AUPRC
+1-logreg,engineered + team,LogisticRegression,Baseline model,0.316,0.0209,A linear model on all features beats random,"9.2x lift, but coefficients dominated by team dummies",row-level AUPRC
+2-logreg-no-team,"engineered, no team",LogisticRegression,Dropped `team` (353 categories),0.3826,0.0257,H7: team causes overfitting to specific programs; removing it lowers CV AUPRC but improves generalisation to the 2020-23 era,<fill in after seeing the result>,row-level AUPRC
+3-randomforest,"engineered, no team",RandomForest,Tree ensemble replaces linear model,0.3753,0.0286,H9: trees capture interactions (e.g. trust TS_per only when GP is high) that logistic regression cannot express,<fill in>,row-level AUPRC
+4-histgb,"engineered, no team",HistGradientBoosting,Sequential boosting + native NaN handling,0.3905,0.0194,H10: boosting beats bagging on tabular data; native NaN handling exploits Rec Rank missingness (69%) better than median imputation,<fill in>,row-level AUPRC
+5-logreg-noweight-player,"engineered, no team/year",LogisticRegression,Player-level aggregation (last season),0.5088,,H6: target is player-grain; aggregating seasons cancels noise,Confirmed. +0.095 over row-level - larger than any modelling change.,player-level AUPRC (matches Kaggle)
